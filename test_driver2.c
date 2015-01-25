@@ -7,13 +7,6 @@
 #include <linux/fs.h>
 #include <asm/uaccess.h>  /* for get_user and put_user */
 
-#if 0
-#include <linux/syscalls.h>
-#include <linux/delay.h>
-#include <asm/paravirt.h>
-#include<linux/slab.h>
-#endif
-
 #include <asm/segment.h>
 #include <linux/buffer_head.h>
 #include <linux/vmalloc.h>

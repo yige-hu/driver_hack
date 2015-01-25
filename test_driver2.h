@@ -6,8 +6,8 @@
  *  (in chardev.c) and the process calling ioctl (ioctl.c)
  */
 
-#ifndef CHARDEV_H
-#define CHARDEV_H
+#ifndef TEST_DRIVER_DEV_H
+#define TEST_DRIVER_DEV_H
 
 #include <linux/ioctl.h>
 

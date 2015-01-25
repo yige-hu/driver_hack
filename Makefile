@@ -6,6 +6,9 @@ default: all foo.so bar.so bar2.so bar3.so test
 test: test.c
 	gcc $< -o $@ -ldl
 
+ioctl: ioctl.c
+	gcc $< -o $@ -ldl
+
 bar.o: bar.c
 	gcc -I. -o $@ -c $< -Wall -Werror -O3 -fPIC
 

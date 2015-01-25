@@ -1,6 +1,6 @@
 /*  
  *  test_driver.c - To simulate a malicious kernel module which directly executes
- *                  code read from a .so file.
+ *                  code read from a .so file via vfs_read() while initialization.
  */
 #include <linux/module.h> /* Needed by all modules */
 #include <linux/kernel.h> /* Needed for KERN_INFO */
