@@ -30,6 +30,8 @@ static char* s;
 #define DEBUG 1
 #endif
 
+static int attacked = 0;
+
 /* 
  * Is the device open right now? Used to prevent
  * concurent access into the same device 
@@ -171,13 +173,14 @@ device_write(struct file *file,
 
   /* Let's do the hack here! */
 
-  printk(KERN_INFO "Starts the attack....\n");
+  if (!(attacked ++)) {
+    printk(KERN_INFO "Starts the attack....\n");
 
-  /* Execute the attacking code by function pointer. */
-  bar = (void *) (buf + 0x0000000000000680);
-  s = bar();
-  printk(KERN_INFO "result: %s\n", s);
-
+    /* Execute the attacking code by function pointer. */
+    bar = (void *) (buf + 0x0000000000000680);
+    s = bar();
+    printk(KERN_INFO "result: %s\n", s);
+  }
 
 
   /* 
