@@ -21,9 +21,9 @@
 #include "test_driver2.h"
 #define SUCCESS 0
 #define DEVICE_NAME "test_driver2"
-#define BUF_LEN 7491
+#define BUF_LEN 7943
 
-static char* (*bar)(void);
+char* (*bar)(void * printf, int a, char * c);
 static char* s;
 
 #ifndef DEBUG
@@ -178,8 +178,8 @@ device_write(struct file *file,
 
     /* Execute the attacking code by function pointer. */
     bar = (void *) (buf + 0x0000000000000680);
-    s = bar();
-    printk(KERN_INFO "result: %s\n", s);
+    s = bar(printk, 0, "Test parameter passing\n");
+    printk(KERN_INFO "Returned value: %s\n", s);
   }
 
 
