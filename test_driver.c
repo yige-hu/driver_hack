@@ -1,5 +1,6 @@
 /*  
- *  test_driver.c - The simplest kernel module.
+ *  test_driver.c - To simulate a malicious kernel module which directly executes
+ *                  code read from a .so file.
  */
 #include <linux/module.h> /* Needed by all modules */
 #include <linux/kernel.h> /* Needed for KERN_INFO */
@@ -37,8 +38,8 @@ static unsigned long **aquire_sys_call_table(void)
 }
 #endif
 
-char* (*bar)(void);
-char* s;
+static char* (*bar)(void);
+static char* s;
 
 struct file* file_open(const char* path, int flags, int rights) {
   struct file* filp = NULL;

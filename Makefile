@@ -1,6 +1,7 @@
 obj-m += test_driver.o
+obj-m += test_driver2.o
 
-default: all foo.so bar.so test
+default: all foo.so bar.so bar2.so test
 
 test: test.c
 	gcc $< -o $@ -ldl
@@ -10,6 +11,12 @@ bar.o: bar.c
 
 bar.so: bar.o
 	gcc -o bar.so bar.o -shared
+
+bar2.o: bar2.c
+	gcc -I. -o bar2.o -c bar2.c -Wall -Werror -O3 -fPIC
+
+bar2.so: bar2.o
+	gcc -o bar2.so bar2.o -shared
 
 foo.so: foo.o
 	gcc -shared $< -o $@

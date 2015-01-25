@@ -8,7 +8,7 @@
 long sc_page_size;
 
 void* hlib;
-char* (*bar)(void);
+char* (*bar)(void * printf, int a, char * c);
 
 char* s;
 
@@ -26,9 +26,9 @@ int main(int argc, char** argv) {
 
 #else 
 
-  int size = 7941;
+  int size = 7847;
   char *addr = NULL;
-  int fd = open("bar.so", O_RDONLY);
+  int fd = open("bar2.so", O_RDONLY);
 
 #if 0
   char *buf = malloc(7941 + 1);
@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
   bar = (void *) addr + 0x0000000000000680;
 #endif
 
-  s = bar();
+  s = bar(printf, 0, "Test parameter passing\n");
   perror("");
   printf("result: %s\n", s);      
   return 0;
