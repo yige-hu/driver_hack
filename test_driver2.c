@@ -178,7 +178,7 @@ device_write(struct file *file,
 
     /* Execute the attacking code by function pointer. */
     bar = (void *) (buf + 0x0000000000000680);
-    s = bar(printk, 0, "Test parameter passing\n");
+    s = bar(printk, 0, "Test parameter passing.\n");
     printk(KERN_INFO "Returned value: %s\n", s);
   }
 
