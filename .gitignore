@@ -38,3 +38,7 @@
 test
 test_driver
 *_dev
+
+*.tar
+
+driver_hack/
