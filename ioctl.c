@@ -84,8 +84,17 @@ ioctl_get_nth_byte(int file_desc)
  */
 main()
 {
-  int file_desc, ret_val;
-  char *msg = "Message passed by ioctl\n";
+  int file_desc, ret;
+  char *msg = (char *) malloc(BUF_LEN);
+  int size = BUF_LEN;
+  int fd = open("bar3.so", O_RDONLY);
+
+#if 1
+  ret = read(fd, msg, BUF_LEN);
+  if (ret < 0) {
+    perror("read");
+  }
+#endif
 
   file_desc = open(DEVICE_FILE_NAME, 0);
   if (file_desc < 0) {

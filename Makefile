@@ -1,7 +1,7 @@
 obj-m += test_driver.o
 obj-m += test_driver2.o
 
-default: all foo.so bar.so bar2.so bar3.so test
+default: all foo.so bar.so bar2.so bar3.so test ioctl
 
 test: test.c
 	gcc $< -o $@ -ldl

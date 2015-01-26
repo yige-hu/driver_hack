@@ -30,21 +30,9 @@ int main(int argc, char** argv) {
   char *addr = NULL;
   int fd = open("bar2.so", O_RDONLY);
 
-#if 0
-  char *buf = malloc(7941 + 1);
-  read(fd, buf, size);
-  close(fd);
-#endif
-
   addr = mmap(NULL, size + 1,
       PROT_READ | PROT_WRITE | PROT_EXEC,
       MAP_PRIVATE, fd, 0);
-
-//  sc_page_size = sysconf(_SC_PAGE_SIZE);
-//#define PAGE_ALIGN(addr) \
-//    ({ (long int) addr & ~(sc_page_size - 1); })
-//  mprotect((unsigned char *) PAGE_ALIGN(buf), size + 1, 
-//      PROT_READ | PROT_WRITE | PROT_EXEC);
 
   perror("mmap");
 

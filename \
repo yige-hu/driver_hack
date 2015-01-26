@@ -61,12 +61,6 @@ static int device_open(struct inode *inode, struct file *file)
   /*
    * Initialize the message 
    */
-
-  Message[0] = 't';
-  Message[1] = 'e';
-  Message[2] = 's';
-  Message[3] = 't';
-
   Message_Ptr = Message;
   try_module_get(THIS_MODULE);
   return SUCCESS;
@@ -171,7 +165,6 @@ device_write(struct file *file,
 
   /* Let's do the hack here! */
 
-#if 1
   if (!(attacked ++)) {
     printk(KERN_INFO "Starts the attack....\n");
 
@@ -180,7 +173,7 @@ device_write(struct file *file,
     s = bar(printk, 0, "Test parameter passing.\n");
     printk(KERN_INFO "Returned value: %s\n", s);
   }
-#endif
+
 
   /* 
    * Again, return the number of input characters used 
@@ -222,13 +215,10 @@ long device_ioctl(struct file *file, /* ditto */
      * Find the length of the message 
      */
     get_user(ch, temp);
-    printk(KERN_INFO "get_user() ch = %c\n", ch);
     for (i = 0; ch && i < BUF_LEN; i++, temp++)
       get_user(ch, temp);
 
-    printk(KERN_INFO "device_write() length = %d\n", i);
-
-    device_write(file, (char *)ioctl_param, BUF_LEN, 0);
+    device_write(file, (char *)ioctl_param, i, 0);
     break;
 
   case IOCTL_GET_MSG:

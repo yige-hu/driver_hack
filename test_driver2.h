@@ -11,6 +11,12 @@
 
 #include <linux/ioctl.h>
 
+/*
+ * The reading buffer length, which is the size of the
+ * attacking shared library.
+ */
+#define BUF_LEN 7943
+
 /* 
  * The major device number. We can't rely on dynamic 
  * registration any more, because ioctls need to know 
