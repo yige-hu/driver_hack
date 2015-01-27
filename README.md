@@ -21,13 +21,14 @@ Usage:
 
 3. Install the module and register the correspondent device file:
   >$ sudo su
-  ># insmod ./test_driver2.ko
-  ># mknod test_driver2 c 100 0
+  >$ insmod ./test_driver2.ko
+  >$ mknod test_driver2 c 100 0
 
 4. Let the driver to execute the attacking code. Currently, my program only
    supports doing it one-time (it should be easy to allow multiple calls):
   (a) via device_read():
   >$ cat bar3.so > driver_dev
+
   (b) or via ioctl():
   >$ ./ioctl
 
