@@ -21,7 +21,9 @@ Usage:
 
 3. Install the module and register the correspondent device file:
   >$ sudo su
+
   >$ insmod ./test_driver2.ko
+
   >$ mknod test_driver2 c 100 0
 
 4. Let the driver to execute the attacking code. Currently, my program only
