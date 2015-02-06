@@ -1,6 +1,9 @@
 obj-m += test_driver.o
 obj-m += test_driver2.o
 
+obj-m += bar4_tot.o
+bar4_tot-y := bar4.o
+
 default: all foo.so bar.so bar2.so bar3.so test ioctl
 
 test: test.c
@@ -23,9 +26,19 @@ bar2.so: bar2.o
 
 bar3.o: bar3.c
 	gcc -I. -o $@ -c $< -Wall -Werror -O3 -fPIC
+#	gcc -I. -o $@ -c $< -rdynamic
 
 bar3.so: bar3.o
 	gcc $< -o $@ -shared
+	#gcc $< -o $@ -shared -rdynamic
+
+bar4.o: bar4.c
+	gcc -D__KERNEL__ -I /usr/src/linux-headers-$(shell uname -r)/include/ -o $@ -c $< -DMODULE -Wall -O2 -Wall -fPIC
+
+#bar4.so: bar4.o
+#	gcc $< -o $@ -shared
+
+#	gcc -I. -I"/usr/src/linux-headers-$(shell uname -r)/include/" -o $@ -c $< -Wall -Werror -O3 -fPIC
 
 foo.so: foo.o
 	gcc -shared $< -o $@
