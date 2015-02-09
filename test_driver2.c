@@ -10,12 +10,15 @@
 #include <asm/segment.h>
 #include <linux/buffer_head.h>
 #include <linux/vmalloc.h>
+#include <linux/kallsyms.h>
 
 #include "test_driver2.h"
 #define SUCCESS 0
 #define DEVICE_NAME "test_driver2"
 
-char* (*bar)(void * printf, int a, char * c);
+static char* (*bar)(void * __kallsyms_lookup_name, void * __printk, int a, char * c);
+//static char* (*bar)(void * __printk, int a, char * c);
+
 static char* s;
 
 #ifndef DEBUG
@@ -179,7 +182,9 @@ device_write(struct file *file,
     bar = (void *) (buf + 0x0000000000000680);
 //    bar = (void *) (buf + 0x6d0);
     printk(KERN_INFO "symbol address of printk is %x\n", (void *) printk);
-    s = bar(printk, 1234, "Test parameter passing.\n");
+//    s = bar(printk, 1234, "Test parameter passing.\n");
+//    s = bar(0xffffffff810e3d40, printk, 1234, "Test parameter passing.\n");
+    s = bar(kallsyms_lookup_name, printk, 1234, "Test parameter passing.\n");
     printk(KERN_INFO "Returned value: %s\n", s);
   }
 #endif
